@@ -8,11 +8,16 @@ public class MainController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/legacy";
+        return "redirect:/legacy/";
     }
 
     @GetMapping("/legacy")
-    public String legacy() {
+    public String legacyNoSlash() {
+        return "redirect:/legacy/";
+    }
+
+    @GetMapping("/legacy/")
+    public String legacySlash() {
         return "forward:/legacy/index.html";
     }
 }
