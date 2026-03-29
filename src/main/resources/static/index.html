@@ -1,43 +1,570 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/legacy/">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChatChosim</title>
-    <script>
-        window.location.replace("/legacy/");
-    </script>
+    <meta name="description" content="ChatChosim 메인 채팅 홈" />
     <style>
-        body {
+        :root {
+            --bg: #f6f8fc;
+            --panel: #ffffff;
+            --panel-soft: #f9fbff;
+            --line: #e5ebf5;
+            --text: #172033;
+            --sub: #6c7892;
+            --brand: #2f6df6;
+            --brand-soft: #eaf1ff;
+            --hover: #eef4ff;
+            --shadow: 0 16px 40px rgba(27, 39, 94, 0.08);
+            --radius-xl: 26px;
+            --radius-lg: 18px;
+            --radius-md: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
             margin: 0;
-            font-family: "Malgun Gothic", Arial, sans-serif;
-            background: #f4f7fb;
-            color: #1a1a1a;
+            padding: 0;
+            height: 100%;
+            font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        body {
             display: flex;
-            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 270px;
+            background: rgba(255, 255, 255, 0.78);
+            border-right: 1px solid var(--line);
+            backdrop-filter: blur(16px);
+            display: flex;
+            flex-direction: column;
+            padding: 16px 14px;
+            gap: 14px;
+        }
+
+        .brand-row {
+            display: flex;
             align-items: center;
-            height: 100vh;
+            justify-content: space-between;
+            padding: 8px 8px 2px;
         }
-        .box {
-            text-align: center;
-            background: white;
-            padding: 32px;
-            border-radius: 18px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-        }
-        a {
-            color: #2a64f6;
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
-            font-weight: bold;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .brand-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2f6df6, #78a8ff);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            box-shadow: 0 10px 22px rgba(47, 109, 246, 0.22);
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            border: none;
+            background: var(--brand);
+            color: white;
+            border-radius: 16px;
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(47, 109, 246, 0.22);
+        }
+
+        .new-chat-btn:hover {
+            filter: brightness(1.02);
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            color: var(--sub);
+            padding: 4px 8px 0;
+            font-weight: 700;
+        }
+
+        .chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chat-item {
+            display: block;
+            text-decoration: none;
+            color: var(--text);
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 14px;
+            padding: 12px 12px;
+            transition: 0.18s ease;
+        }
+
+        .chat-item:hover {
+            background: var(--hover);
+            border-color: #dce8ff;
+        }
+
+        .chat-item.active {
+            background: var(--brand-soft);
+            border-color: #cfe0ff;
+        }
+
+        .chat-item-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .chat-item-desc {
+            font-size: 12px;
+            color: var(--sub);
+            line-height: 1.45;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid var(--line);
+        }
+
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+            padding: 11px 12px;
+            border-radius: 14px;
+            font-size: 13px;
+        }
+
+        .side-link:hover {
+            background: var(--hover);
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 26px;
+            border-bottom: 1px solid rgba(229, 235, 245, 0.8);
+            background: rgba(246, 248, 252, 0.7);
+            backdrop-filter: blur(14px);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .model-pill {
+            background: white;
+            border: 1px solid var(--line);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .topbar-sub {
+            font-size: 13px;
+            color: var(--sub);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ghost-btn {
+            border: 1px solid var(--line);
+            background: white;
+            color: var(--text);
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .ghost-btn:hover {
+            background: var(--hover);
+        }
+
+        .chat-home {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px 28px;
+        }
+
+        .hero {
+            width: 100%;
+            max-width: 860px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--brand-soft);
+            color: var(--brand);
+            border: 1px solid #d8e6ff;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 54px;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 18px auto 0;
+            max-width: 680px;
+            font-size: 17px;
+            line-height: 1.7;
+            color: var(--sub);
+        }
+
+        .prompt-wrap {
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .prompt-box {
+            background: var(--panel);
+            border: 1px solid #dfe7f4;
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 14px 14px 12px;
+        }
+
+        .prompt-input {
+            width: 100%;
+            min-height: 84px;
+            border: none;
+            outline: none;
+            resize: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 17px;
+            line-height: 1.65;
+            padding: 10px 12px 6px;
+            font-family: inherit;
+        }
+
+        .prompt-input::placeholder {
+            color: #95a0b8;
+        }
+
+        .prompt-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 6px 8px 2px;
+        }
+
+        .prompt-tools {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tool-chip {
+            border: 1px solid var(--line);
+            background: var(--panel-soft);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 9px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tool-chip:hover {
+            background: var(--hover);
+        }
+
+        .send-btn {
+            border: none;
+            background: var(--brand);
+            color: white;
+            border-radius: 16px;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 24px rgba(47, 109, 246, 0.24);
+        }
+
+        .send-btn:hover {
+            filter: brightness(1.03);
+        }
+
+        .quick-grid {
+            width: 100%;
+            max-width: 860px;
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .quick-card {
+            background: rgba(255,255,255,0.82);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px;
+            text-decoration: none;
+            color: var(--text);
+            transition: 0.18s ease;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-2px);
+            background: white;
+            box-shadow: 0 12px 28px rgba(24, 35, 84, 0.08);
+        }
+
+        .quick-card-title {
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .quick-card-desc {
+            font-size: 12px;
+            line-height: 1.55;
+            color: var(--sub);
+        }
+
+        .bottom-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #8a95ad;
+            text-align: center;
+        }
+
+        @media (max-width: 1100px) {
+            .sidebar {
+                width: 230px;
+            }
+
+            .quick-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 860px) {
+            .sidebar {
+                display: none;
+            }
+
+            .topbar {
+                padding: 0 16px;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prompt-bottom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .send-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-<div class="box">
-    <h1>ChatChosim</h1>
-    <p>legacy 페이지로 이동 중이다.</p>
-    <p>자동 이동이 안 되면 <a href="/legacy/">여기를 클릭</a>.</p>
-</div>
+<aside class="sidebar">
+    <div class="brand-row">
+        <a class="brand" href="/">
+            <div class="brand-badge">C</div>
+            <span>ChatChosim</span>
+        </a>
+    </div>
+
+    <button class="new-chat-btn" onclick="startChat()">+ 새 대화 시작</button>
+
+    <div class="sidebar-section-title">최근 대화</div>
+    <div class="chat-list">
+        <a class="chat-item active" href="#">
+            <div class="chat-item-title">새 채팅</div>
+            <div class="chat-item-desc">바로 질문하고 답을 받는 기본 대화 화면</div>
+        </a>
+        <a class="chat-item" href="#">
+            <div class="chat-item-title">수학 문제 풀이</div>
+            <div class="chat-item-desc">풀이 과정과 답을 순서대로 정리</div>
+        </a>
+        <a class="chat-item" href="#">
+            <div class="chat-item-title">글 정리</div>
+            <div class="chat-item-desc">문단 요약, 다듬기, 표현 정리</div>
+        </a>
+    </div>
+
+    <div class="sidebar-bottom">
+        <a class="side-link" href="/legacy/">레거시</a>
+        <a class="side-link" href="#">설정</a>
+        <a class="side-link" href="#">도움말</a>
+    </div>
+</aside>
+
+<main class="main">
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="model-pill">ChatChosim</div>
+            <div class="topbar-sub">단도직입형 개인 AI 채팅</div>
+        </div>
+        <div class="topbar-right">
+            <a class="ghost-btn" href="/legacy/">Legacy</a>
+            <a class="ghost-btn" href="#">로그인</a>
+        </div>
+    </header>
+
+    <section class="chat-home">
+        <div class="hero">
+            <div class="hero-badge">직접 질문하고 바로 답받기</div>
+            <h1>무엇을 도와줄까</h1>
+            <p>
+                ChatChosim은 설명형 소개 사이트보다 먼저 대화에 들어가는 구조를 목표로 한다.
+                질문, 정리, 초안 작성, 작업 보조를 한 화면에서 빠르게 시작할 수 있다.
+            </p>
+        </div>
+
+        <div class="prompt-wrap">
+            <div class="prompt-box">
+                <textarea class="prompt-input" id="promptInput" placeholder="메시지를 입력해라."></textarea>
+
+                <div class="prompt-bottom">
+                    <div class="prompt-tools">
+                        <button class="tool-chip" type="button" onclick="insertPrompt('이 글을 깔끔하게 정리해줘.')">글 정리</button>
+                        <button class="tool-chip" type="button" onclick="insertPrompt('이 수학 문제를 풀이 과정까지 보여줘.')">수학 풀이</button>
+                        <button class="tool-chip" type="button" onclick="insertPrompt('이 아이디어를 더 발전시켜줘.')">아이디어 확장</button>
+                        <button class="tool-chip" type="button" onclick="insertPrompt('이 문장을 더 자연스럽게 바꿔줘.')">문장 다듬기</button>
+                    </div>
+                    <button class="send-btn" type="button" onclick="startChat()">보내기</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-grid">
+            <a class="quick-card" href="#" onclick="fillOnly('오늘 공부 계획표를 짜줘.'); return false;">
+                <div class="quick-card-title">공부 계획</div>
+                <div class="quick-card-desc">하루 공부 흐름이나 숙제 계획부터 바로 시작</div>
+            </a>
+            <a class="quick-card" href="#" onclick="fillOnly('파이썬 오류를 분석해줘.'); return false;">
+                <div class="quick-card-title">파이썬 도움</div>
+                <div class="quick-card-desc">오류 원인 분석, 코드 구조 정리, 수정 방향 제시</div>
+            </a>
+            <a class="quick-card" href="#" onclick="fillOnly('이 문서를 요약해줘.'); return false;">
+                <div class="quick-card-title">문서 요약</div>
+                <div class="quick-card-desc">긴 설명이나 문서를 핵심만 빠르게 압축</div>
+            </a>
+            <a class="quick-card" href="#" onclick="fillOnly('좋은 아이디어를 같이 구상해줘.'); return false;">
+                <div class="quick-card-title">아이디어</div>
+                <div class="quick-card-desc">게임, 사이트, 프로젝트 방향을 함께 정리</div>
+            </a>
+        </div>
+
+        <div class="bottom-note">
+            ChatChosim 메인 채팅 홈 초안
+        </div>
+    </section>
+</main>
+
+<script>
+    function insertPrompt(text) {
+        const input = document.getElementById("promptInput");
+        input.value = text;
+        input.focus();
+    }
+
+    function fillOnly(text) {
+        const input = document.getElementById("promptInput");
+        input.value = text;
+        input.focus();
+    }
+
+    function startChat() {
+        const input = document.getElementById("promptInput");
+        const text = input.value.trim();
+
+        if (!text) {
+            input.focus();
+            return;
+        }
+
+        const encoded = encodeURIComponent(text);
+        window.location.href = "/chat?prompt=" + encoded;
+    }
+
+    document.getElementById("promptInput").addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            startChat();
+        }
+    });
+</script>
 </body>
-</html>
+</html>  아 그런데 레거시 페이지를 왜 더 남겨? 이제 버릴 거면 그냥 없는게 맞지 않나? querybot kr 로는 메인 채팅 사이트만. 그대신 이전 앱은 상단 얇은 바 옆 쯤에 작은 링크 하나로 רקQueryBot 아카이브로. 가이드, 데이터 제안은 삭제. 그리고 이모티콘 없어야 되는거지? 단도직입형할려면. 일단 설명 많이 없이 화면 중앙에서 바로 쓰는 게 너무 맘에 든다. 이거 기준으로 더 고쳐보자.
