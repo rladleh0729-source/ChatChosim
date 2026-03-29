@@ -21,11 +21,6 @@ public class MainController {
         return "forward:/legacy/index.html";
     }
 
-    @GetMapping("/legacy/index.html")
-    public String legacyIndex() {
-        return "redirect:/legacy/";
-    }
-
     @GetMapping("/legacy/about")
     public String aboutNoSlash() {
         return "redirect:/legacy/about/";
@@ -34,11 +29,6 @@ public class MainController {
     @GetMapping("/legacy/about/")
     public String aboutSlash() {
         return "forward:/legacy/about/index.html";
-    }
-
-    @GetMapping("/legacy/about/index.html")
-    public String aboutIndex() {
-        return "redirect:/legacy/about/";
     }
 
     @GetMapping("/legacy/features")
@@ -51,11 +41,6 @@ public class MainController {
         return "forward:/legacy/features/index.html";
     }
 
-    @GetMapping("/legacy/features/index.html")
-    public String featuresIndex() {
-        return "redirect:/legacy/features/";
-    }
-
     @GetMapping("/legacy/download")
     public String downloadNoSlash() {
         return "redirect:/legacy/download/";
@@ -64,11 +49,6 @@ public class MainController {
     @GetMapping("/legacy/download/")
     public String downloadSlash() {
         return "forward:/legacy/download/index.html";
-    }
-
-    @GetMapping("/legacy/download/index.html")
-    public String downloadIndex() {
-        return "redirect:/legacy/download/";
     }
 
     @GetMapping("/legacy/archive")
@@ -81,11 +61,6 @@ public class MainController {
         return "forward:/legacy/archive/index.html";
     }
 
-    @GetMapping("/legacy/archive/index.html")
-    public String archiveIndex() {
-        return "redirect:/legacy/archive/";
-    }
-
     @GetMapping("/legacy/changelog")
     public String changelogNoSlash() {
         return "redirect:/legacy/changelog/";
@@ -94,11 +69,6 @@ public class MainController {
     @GetMapping("/legacy/changelog/")
     public String changelogSlash() {
         return "forward:/legacy/changelog/index.html";
-    }
-
-    @GetMapping("/legacy/changelog/index.html")
-    public String changelogIndex() {
-        return "redirect:/legacy/changelog/";
     }
 
     @GetMapping("/legacy/guide")
@@ -111,11 +81,6 @@ public class MainController {
         return "forward:/legacy/guide/index.html";
     }
 
-    @GetMapping("/legacy/guide/index.html")
-    public String guideIndex() {
-        return "redirect:/legacy/guide/";
-    }
-
     @GetMapping("/legacy/contribute")
     public String contributeNoSlash() {
         return "redirect:/legacy/contribute/";
@@ -124,10 +89,5 @@ public class MainController {
     @GetMapping("/legacy/contribute/")
     public String contributeSlash() {
         return "forward:/legacy/contribute/index.html";
-    }
-
-    @GetMapping("/legacy/contribute/index.html")
-    public String contributeIndex() {
-        return "redirect:/legacy/contribute/";
     }
 }
