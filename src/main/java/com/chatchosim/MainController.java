@@ -8,7 +8,7 @@ public class MainController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/legacy/";
+        return "forward:/index.html";
     }
 
     @GetMapping("/legacy")
