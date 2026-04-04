@@ -4,9 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChatchosimApplication {
-
+public class ChatChosimApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ChatchosimApplication.class, args);
+		SpringApplication.run(ChatChosimApplication.class, args);
 	}
 }
