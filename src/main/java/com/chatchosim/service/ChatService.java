@@ -1,5 +1,6 @@
 package com.chatchosim.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,9 +11,11 @@ import java.util.Map;
 @Service
 public class ChatService {
 
-    // 현재 uvicorn을 5001에서 띄우는 기준
-    private static final String PYTHON_AI_GENERATE_URL = "http://127.0.0.1:5001/generate";
-    private static final String PYTHON_AI_HEALTH_URL = "http://127.0.0.1:5001/health";
+    @Value("${CHOSIM_AI_GENERATE_URL}")
+    private String pythonAiGenerateUrl;
+
+    @Value("${CHOSIM_AI_HEALTH_URL}")
+    private String pythonAiHealthUrl;
 
     public String generateReply(String message) {
         if (message == null || message.trim().isEmpty()) {
@@ -35,61 +38,37 @@ public class ChatService {
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                    PYTHON_AI_GENERATE_URL,
+                    pythonAiGenerateUrl,
                     HttpMethod.POST,
                     requestEntity,
                     Map.class
             );
 
-            Map<?, ?> body = response.getBody();
-
-            if (body == null) {
-                return "AI 서버 응답 본문이 비어 있다.";
+            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+                return "AI 응답을 불러오지 못했다.";
             }
 
-            Object successObj = body.get("success");
-            boolean success = Boolean.TRUE.equals(successObj);
+            Object success = response.getBody().get("success");
+            Object reply = response.getBody().get("reply");
 
-            Object replyObj = body.get("reply");
-            String reply = replyObj == null ? "" : String.valueOf(replyObj).trim();
-
-            if (success && !reply.isEmpty()) {
-                return reply;
+            if (success instanceof Boolean && !((Boolean) success)) {
+                return reply != null ? reply.toString() : "AI 서버가 응답을 거부했다.";
             }
 
-            if (!reply.isEmpty()) {
-                return reply;
-            }
+            return reply != null ? reply.toString() : "응답이 비어 있다.";
 
-            return "AI 서버 응답이 비정상이다.";
         } catch (Exception e) {
-            return "AI 서버 연결에 실패했다: " + e.getMessage();
+            return "서버 처리 중 오류: " + e.getMessage();
         }
     }
 
-    public Map<String, Object> getAiHealth() {
-        Map<String, Object> result = new LinkedHashMap<>();
-
+    public boolean checkPythonHealth() {
         try {
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    PYTHON_AI_HEALTH_URL,
-                    HttpMethod.GET,
-                    null,
-                    Map.class
-            );
-
-            Map<?, ?> body = response.getBody();
-
-            result.put("success", true);
-            result.put("pythonAiReachable", true);
-            result.put("pythonAiHealth", body);
-            return result;
+            ResponseEntity<String> response = restTemplate.getForEntity(pythonAiHealthUrl, String.class);
+            return response.getStatusCode().is2xxSuccessful();
         } catch (Exception e) {
-            result.put("success", false);
-            result.put("pythonAiReachable", false);
-            result.put("message", "Python AI 서버 상태 확인 실패: " + e.getMessage());
-            return result;
+            return false;
         }
     }
 }
