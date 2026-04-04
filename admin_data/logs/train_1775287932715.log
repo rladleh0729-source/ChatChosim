@@ -1,0 +1,7 @@
+TRAINING REQUEST
+time=2026-04-04T16:32:12.716933600
+modelName=ChatChosim_Generative_v0
+baseModel=small-transformer
+epochs=3
+batchSize=4
+status=queued
