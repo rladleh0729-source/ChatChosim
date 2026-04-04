@@ -18,6 +18,10 @@ public class ChatService {
     private String pythonAiHealthUrl;
 
     public String generateReply(String message) {
+        System.out.println("generateReply 호출됨, message = " + message);
+        System.out.println("현재 AI generate URL = " + pythonAiGenerateUrl);
+        System.out.println("현재 AI health URL = " + pythonAiHealthUrl);
+
         if (message == null || message.trim().isEmpty()) {
             return "메시지가 비어 있다.";
         }
