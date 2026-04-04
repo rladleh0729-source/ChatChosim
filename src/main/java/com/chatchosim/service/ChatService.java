@@ -71,4 +71,8 @@ public class ChatService {
             return false;
         }
     }
+
+    public boolean getAiHealth() {
+        return checkPythonHealth();
+    }
 }
