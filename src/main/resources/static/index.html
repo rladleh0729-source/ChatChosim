@@ -6,22 +6,25 @@
     <title>ChatChosim</title>
     <style>
         :root {
-            --bg: #f6f4fa;
-            --panel: rgba(255, 255, 255, 0.92);
-            --line: #e7e0ef;
+            --bg: #f4f1f9;
+            --panel: rgba(255, 255, 255, 0.88);
+            --line: #ddd6ea;
             --text: #2a2140;
-            --sub: #766b8e;
-            --brand: #3f2b56;
-            --user-bg: linear-gradient(135deg, #4b3768 0%, #3f2b56 100%);
+            --sub: #7d7294;
+
+            --brand: #4a3966;
+            --brand-2: #6d5a92;
+            --brand-3: #c9bce6;
+
             --user-text: #ffffff;
-            --bot-bg: #ffffff;
+            --bot-bg: rgba(255, 255, 255, 0.92);
             --bot-text: #2a2140;
-            --shadow: 0 18px 44px rgba(63, 43, 86, 0.10);
-            --soft-bg: #f8f5fc;
-            --soft-line: #ddd4e8;
-            --focus-ring: rgba(203, 185, 235, 0.22);
-            --badge-grad: linear-gradient(135deg, #5a4380 0%, #cbb9eb 100%);
-            --topbar-bg: rgba(246, 244, 250, 0.82);
+
+            --shadow-soft: 0 14px 34px rgba(66, 48, 97, 0.08);
+            --shadow-panel: 0 24px 60px rgba(70, 50, 104, 0.12);
+            --shadow-strong: 0 18px 40px rgba(74, 57, 102, 0.18);
+
+            --focus-ring: rgba(203, 185, 235, 0.30);
         }
 
         * {
@@ -33,18 +36,45 @@
             padding: 0;
             height: 100%;
             font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
-            background:
-                    radial-gradient(circle at 12% 12%, rgba(203, 185, 235, 0.22), transparent 30%),
-                    radial-gradient(circle at 88% 16%, rgba(216, 196, 206, 0.18), transparent 28%),
-                    radial-gradient(circle at 50% 100%, rgba(160, 145, 190, 0.10), transparent 34%),
-                    linear-gradient(180deg, #fbfafe 0%, #f6f4fa 56%, #f2eef7 100%);
             color: var(--text);
+            background:
+                    radial-gradient(circle at 18% 14%, rgba(203, 185, 235, 0.48) 0%, rgba(203, 185, 235, 0.18) 18%, transparent 36%),
+                    radial-gradient(circle at 82% 18%, rgba(179, 164, 212, 0.34) 0%, rgba(179, 164, 212, 0.14) 16%, transparent 34%),
+                    radial-gradient(circle at 72% 78%, rgba(228, 220, 243, 0.70) 0%, rgba(228, 220, 243, 0.24) 18%, transparent 34%),
+                    radial-gradient(circle at 28% 88%, rgba(214, 201, 233, 0.46) 0%, rgba(214, 201, 233, 0.18) 20%, transparent 34%),
+                    linear-gradient(180deg, #f9f7fc 0%, #f4f1f9 52%, #efebf6 100%);
         }
 
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                    linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent 28%),
+                    linear-gradient(215deg, rgba(255, 255, 255, 0.14), transparent 30%);
+            mix-blend-mode: screen;
+            opacity: 0.7;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                    radial-gradient(circle at 70% 12%, rgba(255, 255, 255, 0.34), transparent 18%),
+                    radial-gradient(circle at 22% 28%, rgba(255, 255, 255, 0.22), transparent 20%),
+                    radial-gradient(circle at 60% 92%, rgba(255, 255, 255, 0.20), transparent 16%);
+            opacity: 0.85;
         }
 
         .topbar {
@@ -53,11 +83,11 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 22px;
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid rgba(125, 107, 158, 0.16);
             background:
-                    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.58)),
-                    var(--topbar-bg);
-            backdrop-filter: blur(14px);
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.74) 0%, rgba(244, 239, 250, 0.84) 46%, rgba(239, 233, 246, 0.88) 100%);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 8px 26px rgba(74, 57, 102, 0.05);
         }
 
         .brand {
@@ -74,14 +104,17 @@
             width: 30px;
             height: 30px;
             border-radius: 10px;
-            background: var(--badge-grad);
+            background:
+                    linear-gradient(135deg, #5f4a84 0%, #8e78ba 48%, #cbb9eb 100%);
             color: #fff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
             font-weight: 800;
-            box-shadow: 0 10px 24px rgba(91, 74, 122, 0.22);
+            box-shadow:
+                    0 10px 22px rgba(95, 74, 132, 0.22),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.32);
         }
 
         .top-link {
@@ -129,19 +162,25 @@
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-soft);
             border: 1px solid var(--line);
         }
 
         .message-row.user .bubble {
-            background: var(--user-bg);
+            background:
+                    linear-gradient(135deg, #564176 0%, #44335f 55%, #3f2b56 100%);
             color: var(--user-text);
-            border-color: transparent;
+            border-color: rgba(80, 61, 111, 0.18);
+            box-shadow:
+                    0 16px 34px rgba(74, 57, 102, 0.22),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.10);
         }
 
         .message-row.bot .bubble {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 246, 252, 0.96));
+            background:
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 247, 252, 0.94) 100%);
             color: var(--bot-text);
+            border-color: rgba(211, 202, 228, 0.80);
         }
 
         .welcome {
@@ -153,7 +192,8 @@
             margin: 0;
             font-size: 48px;
             letter-spacing: -0.04em;
-            color: #3f2b56;
+            color: #4a3966;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
         }
 
         .welcome p {
@@ -166,17 +206,26 @@
             position: sticky;
             bottom: 0;
             background:
-                    linear-gradient(180deg, rgba(246, 244, 250, 0) 0%, rgba(246, 244, 250, 0.82) 24%, rgba(246, 244, 250, 0.96) 100%);
+                    linear-gradient(
+                            180deg,
+                            rgba(244, 241, 249, 0.00) 0%,
+                            rgba(244, 241, 249, 0.42) 18%,
+                            rgba(244, 241, 249, 0.76) 42%,
+                            rgba(244, 241, 249, 0.96) 100%
+                    );
             padding-top: 10px;
         }
 
         .prompt-box {
-            background: var(--panel);
-            border: 1px solid var(--soft-line);
+            background:
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(250, 247, 252, 0.92) 100%);
+            border: 1px solid rgba(214, 205, 230, 0.92);
             border-radius: 28px;
-            box-shadow: 0 22px 54px rgba(63, 43, 86, 0.12);
+            box-shadow:
+                    var(--shadow-panel),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.72);
             padding: 14px 14px 12px;
-            backdrop-filter: blur(16px);
+            backdrop-filter: blur(18px);
         }
 
         .prompt-input {
@@ -194,11 +243,7 @@
         }
 
         .prompt-input::placeholder {
-            color: #9a90ae;
-        }
-
-        .prompt-input:focus {
-            box-shadow: inset 0 0 0 9999px transparent;
+            color: #aca1bf;
         }
 
         .prompt-bottom {
@@ -216,36 +261,44 @@
         }
 
         .tool-chip {
-            border: 1px solid var(--line);
-            background: linear-gradient(180deg, #fcfbfe 0%, #f4eff9 100%);
-            color: #4d4262;
+            border: 1px solid rgba(214, 205, 230, 0.96);
+            background:
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(242, 236, 249, 0.92) 100%);
+            color: #5a4c73;
             border-radius: 999px;
             padding: 9px 12px;
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 6px 18px rgba(63, 43, 86, 0.05);
+            box-shadow:
+                    0 8px 18px rgba(74, 57, 102, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.65);
         }
 
         .tool-chip:hover {
-            background: linear-gradient(180deg, #f7f2fb 0%, #eee7f6 100%);
-            border-color: #d7cae6;
+            background:
+                    linear-gradient(180deg, rgba(250, 246, 253, 0.98) 0%, rgba(236, 228, 246, 0.96) 100%);
+            border-color: rgba(203, 190, 226, 1);
         }
 
         .send-btn {
             border: none;
-            background: linear-gradient(135deg, #4b3768 0%, #3f2b56 100%);
+            background:
+                    linear-gradient(135deg, #5d4a80 0%, #493562 58%, #3f2b56 100%);
             color: white;
             border-radius: 16px;
             padding: 12px 18px;
             font-size: 14px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 12px 24px rgba(63, 43, 86, 0.20);
+            box-shadow:
+                    0 14px 26px rgba(74, 57, 102, 0.22),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.16);
         }
 
         .send-btn:hover {
-            background: linear-gradient(135deg, #5a4380 0%, #493562 100%);
+            background:
+                    linear-gradient(135deg, #6b568f 0%, #554073 58%, #483360 100%);
         }
 
         .send-btn:focus-visible,
