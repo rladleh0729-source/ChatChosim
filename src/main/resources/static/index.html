@@ -6,17 +6,22 @@
     <title>ChatChosim</title>
     <style>
         :root {
-            --bg: #f6f8fc;
-            --panel: #ffffff;
-            --line: #e3e9f3;
-            --text: #172033;
-            --sub: #6c7892;
-            --brand: #2f6df6;
-            --user-bg: #2f6df6;
+            --bg: #f6f4fa;
+            --panel: rgba(255, 255, 255, 0.92);
+            --line: #e7e0ef;
+            --text: #2a2140;
+            --sub: #766b8e;
+            --brand: #3f2b56;
+            --user-bg: linear-gradient(135deg, #4b3768 0%, #3f2b56 100%);
             --user-text: #ffffff;
             --bot-bg: #ffffff;
-            --bot-text: #172033;
-            --shadow: 0 18px 44px rgba(27, 39, 94, 0.08);
+            --bot-text: #2a2140;
+            --shadow: 0 18px 44px rgba(63, 43, 86, 0.10);
+            --soft-bg: #f8f5fc;
+            --soft-line: #ddd4e8;
+            --focus-ring: rgba(203, 185, 235, 0.22);
+            --badge-grad: linear-gradient(135deg, #5a4380 0%, #cbb9eb 100%);
+            --topbar-bg: rgba(246, 244, 250, 0.82);
         }
 
         * {
@@ -28,7 +33,11 @@
             padding: 0;
             height: 100%;
             font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
-            background: var(--bg);
+            background:
+                    radial-gradient(circle at 12% 12%, rgba(203, 185, 235, 0.22), transparent 30%),
+                    radial-gradient(circle at 88% 16%, rgba(216, 196, 206, 0.18), transparent 28%),
+                    radial-gradient(circle at 50% 100%, rgba(160, 145, 190, 0.10), transparent 34%),
+                    linear-gradient(180deg, #fbfafe 0%, #f6f4fa 56%, #f2eef7 100%);
             color: var(--text);
         }
 
@@ -45,7 +54,10 @@
             justify-content: space-between;
             padding: 0 22px;
             border-bottom: 1px solid var(--line);
-            background: rgba(246, 248, 252, 0.9);
+            background:
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.58)),
+                    var(--topbar-bg);
+            backdrop-filter: blur(14px);
         }
 
         .brand {
@@ -62,13 +74,14 @@
             width: 30px;
             height: 30px;
             border-radius: 10px;
-            background: linear-gradient(135deg, #2f6df6, #78a8ff);
+            background: var(--badge-grad);
             color: #fff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
             font-weight: 800;
+            box-shadow: 0 10px 24px rgba(91, 74, 122, 0.22);
         }
 
         .top-link {
@@ -127,7 +140,7 @@
         }
 
         .message-row.bot .bubble {
-            background: var(--bot-bg);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 246, 252, 0.96));
             color: var(--bot-text);
         }
 
@@ -140,6 +153,7 @@
             margin: 0;
             font-size: 48px;
             letter-spacing: -0.04em;
+            color: #3f2b56;
         }
 
         .welcome p {
@@ -151,16 +165,18 @@
         .input-wrap {
             position: sticky;
             bottom: 0;
-            background: var(--bg);
+            background:
+                    linear-gradient(180deg, rgba(246, 244, 250, 0) 0%, rgba(246, 244, 250, 0.82) 24%, rgba(246, 244, 250, 0.96) 100%);
             padding-top: 10px;
         }
 
         .prompt-box {
             background: var(--panel);
-            border: 1px solid #dfe7f4;
+            border: 1px solid var(--soft-line);
             border-radius: 28px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 22px 54px rgba(63, 43, 86, 0.12);
             padding: 14px 14px 12px;
+            backdrop-filter: blur(16px);
         }
 
         .prompt-input {
@@ -175,6 +191,14 @@
             line-height: 1.65;
             padding: 10px 12px 6px;
             font-family: inherit;
+        }
+
+        .prompt-input::placeholder {
+            color: #9a90ae;
+        }
+
+        .prompt-input:focus {
+            box-shadow: inset 0 0 0 9999px transparent;
         }
 
         .prompt-bottom {
@@ -193,24 +217,43 @@
 
         .tool-chip {
             border: 1px solid var(--line);
-            background: #f9fbff;
-            color: var(--text);
+            background: linear-gradient(180deg, #fcfbfe 0%, #f4eff9 100%);
+            color: #4d4262;
             border-radius: 999px;
             padding: 9px 12px;
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 6px 18px rgba(63, 43, 86, 0.05);
+        }
+
+        .tool-chip:hover {
+            background: linear-gradient(180deg, #f7f2fb 0%, #eee7f6 100%);
+            border-color: #d7cae6;
         }
 
         .send-btn {
             border: none;
-            background: var(--brand);
+            background: linear-gradient(135deg, #4b3768 0%, #3f2b56 100%);
             color: white;
             border-radius: 16px;
             padding: 12px 18px;
             font-size: 14px;
             font-weight: 800;
             cursor: pointer;
+            box-shadow: 0 12px 24px rgba(63, 43, 86, 0.20);
+        }
+
+        .send-btn:hover {
+            background: linear-gradient(135deg, #5a4380 0%, #493562 100%);
+        }
+
+        .send-btn:focus-visible,
+        .tool-chip:focus-visible,
+        .top-link:focus-visible,
+        .brand:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 4px var(--focus-ring);
         }
 
         @media (max-width: 860px) {
